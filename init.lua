@@ -1,38 +1,3 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, and understand
-  what your configuration is doing.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-  And then you can explore or search through `:help lua-guide` Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
---]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -55,6 +20,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
 --
@@ -62,17 +28,66 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
-
+  'sbdchd/neoformat',
   -- Git related plugins
   'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
 
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({})
+    end,
+  },
+
+  -- The c# experience babyyyy
+  'OmniSharp/omnisharp-vim',
+  'marko-cerovac/material.nvim',
+
+  'tpope/vim-rhubarb',
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
+  'neovim/nvim-lspconfig',
+  'simrat39/rust-tools.nvim',
+
+  -- Debugging
+  'nvim-lua/plenary.nvim',
+  'mfussenegger/nvim-dap',
+
+  {
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua" },
+    config = function()
+      require("copilot_cmp").setup()
+    end
+  },
+
+  -- dap
+  'mfussenegger/nvim-dap',
+
+  {
+    'glepnir/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+
+      }
+    end,
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } }
+  },
+
+  -- Transparent windows
+  'xiyaowong/transparent.nvim',
+
+  --svelte
+  'leafOfTree/vim-svelte-plugin',
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
-  { -- LSP Configuration & Plugins
+  {
+    -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
@@ -87,15 +102,17 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-  {'nvim-lua/plenary.nvim',  'ThePrimeagen/harpoon'},
-  { -- Autocompletion
+  { 'nvim-lua/plenary.nvim', 'ThePrimeagen/harpoon' },
+  {
+    -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
-  { -- Adds git releated signs to the gutter, as well as utilities for managing changes
+  { 'folke/which-key.nvim',  opts = {} },
+  {
+    -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
       -- See `:help gitsigns.txt`
@@ -109,28 +126,25 @@ require('lazy').setup({
     },
   },
 
-  { -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
-  },
 
-  { -- Set lualine as statusline
+  "ellisonleao/gruvbox.nvim",
+  "Pocco81/true-zen.nvim",
+
+  {
+    -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
         component_separators = '|',
         section_separators = '',
       },
     },
   },
 
-  { -- Add indentation guides even on blank lines
+  {
+    -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
@@ -144,7 +158,13 @@ require('lazy').setup({
   { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
+  {
+    'nvim-telescope/telescope.nvim',
+    version = '*',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    file_ignore_patterns = {
+      ".git/", ".cache", "%.o", "%.a", "%.out", "%.class", "%.pdf", "%.mkv", "%.mp4", "%.zip", "./target" },
+  },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
   -- Only load if `make` is available. Make sure you have the system
@@ -159,7 +179,8 @@ require('lazy').setup({
     end,
   },
 
-  { -- Highlight, edit, and navigate code
+  {
+    -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
@@ -220,6 +241,9 @@ vim.wo.signcolumn = 'yes'
 vim.o.updatetime = 250
 vim.o.timeout = true
 vim.o.timeoutlen = 300
+
+-- relative linenumbers
+vim.o.relativenumber = true
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -370,32 +394,38 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  -- lsp features
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+  nmap('<leader>ci', vim.lsp.buf.implementation, '[C]ode [I]mplementation')
 
   -- Harpoon
   nmap('<leader>bf', require("harpoon.mark").add_file, '[C]ode [A]ction')
 
-  nmap('<leader>b1', function () require("harpoon.ui").nav_file(1) end, '[C]ode [A]ction')
-  nmap('<leader>b2', function () require("harpoon.ui").nav_file(2) end, '[C]ode [A]ction')
-  nmap('<leader>b3', function () require("harpoon.ui").nav_file(3) end, '[C]ode [A]ction')
-  nmap('<leader>b4', function () require("harpoon.ui").nav_file(4) end, '[C]ode [A]ction')
+  nmap('<leader>b1', function() require("harpoon.ui").nav_file(1) end, '[C]ode [A]ction')
+  nmap('<leader>b2', function() require("harpoon.ui").nav_file(2) end, '[C]ode [A]ction')
+  nmap('<leader>b3', function() require("harpoon.ui").nav_file(3) end, '[C]ode [A]ction')
+  nmap('<leader>b4', function() require("harpoon.ui").nav_file(4) end, '[C]ode [A]ction')
+
+  -- Focus
+  nmap('<leader>f', function() require("true-zen").ataraxis() end, '[C]ode [A]ction')
+  nmap('<leader>af', function() require("true-zen").focus() end, '[C]ode [A]ction')
 
   nmap('<leader>bn', require("harpoon.ui").nav_next, '[C]ode [A]ction')
   nmap('<leader>bb', require("harpoon.ui").nav_next, '[C]ode [A]ction')
-  nmap('<leader>st', require("harpoon.ui").toggle_quick_menu,'[C]ode [A]ction')
+  nmap('<leader>st', require("harpoon.ui").toggle_quick_menu, '[C]ode [A]ction')
 
-  nmap('<leader>s0', function () require("harpoon.tmux").gotoTerminal(0) end,'[C]ode [A]ction')
-  nmap('<leader>s1', function () require("harpoon.tmux").gotoTerminal(1) end,'[C]ode [A]ction')
-  nmap('<leader>s2', function () require("harpoon.tmux").gotoTerminal(2) end,'[C]ode [A]ction')
-  nmap('<leader>hr', function () require("harpoon.mark").rm_file(1) end,'[C]ode [A]ction')
+  nmap('<leader>s0', function() require("harpoon.tmux").gotoTerminal(0) end, '[C]ode [A]ction')
+  nmap('<leader>s1', function() require("harpoon.tmux").gotoTerminal(1) end, '[C]ode [A]ction')
+  nmap('<leader>s2', function() require("harpoon.tmux").gotoTerminal(2) end, '[C]ode [A]ction')
+  nmap('<leader>hr', function() require("harpoon.mark").rm_file(1) end, '[C]ode [A]ction')
 
 
   -- executable
-  nmap('<leader>x', vim.cmd.split ,'[C]ode [A]ction')
+  nmap('<leader>x', vim.cmd.split, '[C]ode [A]ction')
 
-  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+  nmap('sd', vim.lsp.buf.definition, '[S]ee [D]efinition')
+  nmap('sr', require('telescope.builtin').lsp_references, '[G]ee [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -475,6 +505,21 @@ local luasnip = require 'luasnip'
 luasnip.config.setup {}
 
 cmp.setup {
+  formatting = {
+    format = function(entry, vim_item)
+      vim_item.menu = ({
+        nvim_lsp = '[LSP]',
+        nvim_lua = '[Lua]',
+        buffer = '[BUF]',
+        luasnip = '[LuaSnip]',
+        nvim_treesitter = '[TS]',
+        tabnine = '[TAB]',
+        rust_analyzer = '🦀 ',
+        copilot = '',
+      })[entry.source.name]
+      return vim_item
+    end,
+  },
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
@@ -508,10 +553,279 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+    -- copilot
+    { name = "copilot",  group_index = 2 },
+
+    --lsp
+    { name = 'nvim_lsp', group_index = 2 },
+    { name = 'luasnip',  group_index = 2 },
   },
 }
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=3 sts=2 sw=2 et
+vim.g.material_style = "darker"
+
+vim.cmd 'colorscheme material'
+
+require('material').setup({
+  contrast = {
+    terminal = false,            -- Enable contrast for the built-in terminal
+    sidebars = false,            -- Enable contrast for sidebar-like windows ( for example Nvim-Tree )
+    floating_windows = false,    -- Enable contrast for floating windows
+    cursor_line = false,         -- Enable darker background for the cursor line
+    non_current_windows = false, -- Enable darker background for non-current windows
+    filetypes = {},              -- Specify which filetypes get the contrasted (darker) background
+  },
+  styles = {
+    -- Give comments style such as bold, italic, underline etc.
+    comments = { --[[ italic = true ]] },
+    strings = { --[[ bold = true ]] },
+    keywords = { --[[ underline = true ]] },
+    functions = { --[[ bold = true, undercurl = true ]] },
+    variables = {},
+    operators = {},
+    types = {},
+  },
+  plugins = { -- Uncomment the plugins that you use to highlight them
+    -- Available plugins:
+    -- "dap",
+    -- "dashboard",
+    -- "gitsigns",
+    -- "hop",
+    -- "indent-blankline",
+    -- "lspsaga",
+    -- "mini",
+    -- "neogit",
+    -- "neorg",
+    -- "nvim-cmp",
+    -- "nvim-navic",
+    -- "nvim-tree",
+    -- "nvim-web-devicons",
+    -- "sneak",
+    -- "telescope",
+    -- "trouble",
+    -- "which-key",
+  },
+  disable = {
+    colored_cursor = false, -- Disable the colored cursor
+    borders = false,        -- Disable borders between verticaly split windows
+    background = false,     -- Prevent the theme from setting the background (NeoVim then uses your terminal background)
+    term_colors = false,    -- Prevent the theme from setting terminal colors
+    eob_lines = false       -- Hide the end-of-buffer lines
+  },
+  high_visibility = {
+    lighter = false,         -- Enable higher contrast text for lighter style
+    darker = false           -- Enable higher contrast text for darker style
+  },
+  lualine_style = "default", -- Lualine style ( can be 'stealth' or 'default' )
+  async_loading = true,      -- Load parts of the theme asyncronously for faster startup (turned on by default)
+  custom_colors = nil,       -- If you want to everride the default colors, set this to a function
+  custom_highlights = {},    -- Overwrite highlights with your own
+})
+
+local opts = {
+  tools = {
+    -- rust-tools options
+
+    -- how to execute terminal commands
+    -- options right now: termopen / quickfix
+    executor = require("rust-tools.executors").termopen,
+    -- callback to execute once rust-analyzer is done initializing the workspace
+    -- The callback receives one parameter indicating the `health` of the server: "ok" | "warning" | "error"
+    on_initialized = nil,
+    -- automatically call RustReloadWorkspace when writing to a Cargo.toml file.
+    reload_workspace_from_cargo_toml = true,
+    -- These apply to the default RustSetInlayHints command
+    inlay_hints = {
+      -- automatically set inlay hints (type hints)
+      -- default: true
+      auto = true,
+      -- Only show inlay hints for the current line
+      only_current_line = false,
+      -- whether to show parameter hints with the inlay hints or not
+      -- default: true
+      show_parameter_hints = true,
+      -- prefix for parameter hints
+      -- default: "<-"
+      parameter_hints_prefix = "<- ",
+      -- prefix for all the other hints (type, chaining)
+      -- default: "=>"
+      other_hints_prefix = "=> ",
+      -- whether to align to the length of the longest line in the file
+      max_len_align = false,
+      -- padding from the left if max_len_align is true
+      max_len_align_padding = 1,
+      -- whether to align to the extreme right or not
+      right_align = false,
+      -- padding from the right if right_align is true
+      right_align_padding = 7,
+      -- The color of the hints
+      highlight = "Comment",
+    },
+    -- options same as lsp hover / vim.lsp.util.open_floating_preview()
+    hover_actions = {
+      -- the border that is used for the hover window
+      -- see vim.api.nvim_open_win()
+      border = {
+        { "╭", "FloatBorder" },
+        { "─", "FloatBorder" },
+        { "╮", "FloatBorder" },
+        { "│", "FloatBorder" },
+        { "╯", "FloatBorder" },
+        { "─", "FloatBorder" },
+        { "╰", "FloatBorder" },
+        { "│", "FloatBorder" },
+      },
+      -- Maximal width of the hover window. Nil means no max.
+      max_width = nil,
+      -- Maximal height of the hover window. Nil means no max.
+      max_height = nil,
+      -- whether the hover action window gets automatically focused
+      -- default: false
+      auto_focus = false,
+    },
+    -- settings for showing the crate graph based on graphviz and the dot
+    -- command
+    crate_graph = {
+      -- Backend used for displaying the graph
+      -- see: https://graphviz.org/docs/outputs/
+      -- default: x11
+      backend = "x11",
+      -- where to store the output, nil for no output stored (relative
+      -- path from pwd)
+      -- default: nil
+      output = nil,
+      -- true for all crates.io and external crates, false only the local
+      -- crates
+      -- default: true
+      full = true,
+      -- List of backends found on: https://graphviz.org/docs/outputs/
+      -- Is used for input validation and autocompletion
+      -- Last updated: 2021-08-26
+      enabled_graphviz_backends = {
+        "bmp",
+        "cgimage",
+        "canon",
+        "dot",
+        "gv",
+        "xdot",
+        "xdot1.2",
+        "xdot1.4",
+        "eps",
+        "exr",
+        "fig",
+        "gd",
+        "gd2",
+        "gif",
+        "gtk",
+        "ico",
+        "cmap",
+        "ismap",
+        "imap",
+        "cmapx",
+        "imap_np",
+        "cmapx_np",
+        "jpg",
+        "jpeg",
+        "jpe",
+        "jp2",
+        "json",
+        "json0",
+        "dot_json",
+        "xdot_json",
+        "pdf",
+        "pic",
+        "pct",
+        "pict",
+        "plain",
+        "plain-ext",
+        "png",
+        "pov",
+        "ps",
+        "ps2",
+        "psd",
+        "sgi",
+        "svg",
+        "svgz",
+        "tga",
+        "tiff",
+        "tif",
+        "tk",
+        "vml",
+        "vmlz",
+        "wbmp",
+        "webp",
+        "xlib",
+        "x11",
+      },
+    },
+  },
+  --
+  -- all the opts to send to nvim-lspconfig
+  -- these override the defaults set by rust-tools.nvim
+  -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+
+  server = {
+    on_attach = function(client, bufnr)
+      on_attach(client, bufnr);
+      vim.keymap.set("n", "<leader>k", require("rust-tools").hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "<leader>l", require("rust-tools").open_cargo_toml.open_cargo_toml, { buffer = bufnr })
+      vim.keymap.set("n", "<leader>u", require("rust-tools").move_item.move_item, { buffer = bufnr })
+      vim.keymap.set("n", "<leader>r", require("rust-tools").runnables.runnables, { buffer = bufnr })
+    end,
+    standalone = true,
+  },
+  -- debugging stuff
+  dap = {
+    adapter = {
+      type = "executable",
+      command = "lldb-vscode",
+      name = "rt_lldb",
+    },
+  },
+}
+
+require('rust-tools').setup(opts)
+
+require('copilot').setup({
+  panel = {
+    enabled = false,
+    auto_refresh = false,
+    keymap = {
+      jump_prev = "[[",
+      jump_next = "]]",
+      accept = "<CR>",
+      refresh = "gr",
+      open = "<M-CR>"
+    },
+    layout = {
+      position = "bottom", -- | top | left | right
+      ratio = 0.4
+    },
+  },
+  suggestion = {
+    enabled = false,
+    auto_trigger = false,
+    debounce = 75,
+    keymap = {
+      accept = "<M-l>",
+      accept_word = false,
+      accept_line = false,
+      next = "<M-]>",
+      prev = "<M-[>",
+      dismiss = "<C-]>",
+    },
+  },
+  filetypes = {
+    yaml = false,
+    markdown = false,
+    help = false,
+    gitcommit = false,
+    gitrebase = false,
+    hgcommit = false,
+    svn = false,
+    cvs = false,
+    ["."] = false,
+  },
+  copilot_node_command = 'node', -- Node.js version must be > 16.x
+  server_opts_overrides = {},
+})
