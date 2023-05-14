@@ -31,6 +31,9 @@ require('lazy').setup({
   'sbdchd/neoformat',
   -- Git related plugins
   'tpope/vim-fugitive',
+  'rcarriga/nvim-notify',
+  'nvim-treesitter/nvim-treesitter',
+  'nvim-treesitter/nvim-treesitter-context',
 
   {
     "zbirenbaum/copilot.lua",
@@ -44,7 +47,7 @@ require('lazy').setup({
   -- The c# experience babyyyy
   'OmniSharp/omnisharp-vim',
   -- cappuccin color scheme scheme
-  { "catppuccin/nvim", name = "catppuccin" },
+  { "catppuccin/nvim",       name = "catppuccin" },
   'tpope/vim-rhubarb',
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -514,7 +517,7 @@ cmp.setup {
         luasnip = '[LuaSnip]',
         nvim_treesitter = '[TS]',
         tabnine = '[TAB]',
-        rust_analyzer = '🦀 ',
+        rust_analyzer = '[RS]',
         copilot = '',
       })[entry.source.name]
       return vim_item
@@ -770,4 +773,69 @@ require('copilot').setup({
   server_opts_overrides = {},
 })
 
-require "colerscheme"
+require("catppuccin").setup({
+  flavour = "mocha",   -- latte, frappe, macchiato, mocha
+  background = {
+                       -- :h background
+    light = "latte",
+    dark = "mocha",
+  },
+  transparent_background = true,
+  show_end_of_buffer = false,   -- show the '~' characters after the end of buffers
+  term_colors = false,
+  dim_inactive = {
+    enabled = false,
+    shade = "dark",
+    percentage = 0.15,
+  },
+  no_italic = false,   -- Force no italic
+  no_bold = false,     -- Force no bold
+  styles = {
+    comments = { "italic" },
+    conditionals = { "italic" },
+    loops = {},
+    functions = {},
+    keywords = {},
+    strings = {},
+    variables = {},
+    numbers = {},
+    booleans = {},
+    properties = {},
+    types = {},
+    operators = {},
+  },
+  color_overrides = {},
+  custom_highlights = {},
+  integrations = {
+    cmp = true,
+    gitsigns = true,
+    nvimtree = true,
+    telescope = true,
+    notify = false,
+    mini = false,
+    -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+  },
+})
+
+
+-- setup must be called before loading
+vim.cmd.colorscheme "catppuccin"
+
+
+require'treesitter-context'.setup{
+  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+  max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+  min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+  line_numbers = true,
+  multiline_threshold = 20, -- Maximum number of lines to collapse for a single context line
+  trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+  mode = 'cursor',  -- Line used to calculate context. Choices: 'cursor', 'topline'
+  -- Separator between context and content. Should be a single character string, like '-'.
+  -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+  separator = nil,
+  zindex = 20, -- The Z-index of the context window
+  on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+}
+
+-- Notify
+require("notify")
