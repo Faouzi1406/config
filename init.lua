@@ -3,12 +3,10 @@ require("lsp")
 require("cmp_setup")
 require("telthescope")
 require("colorscheme")
+require("keybindings")
 require("ocaml").setup()
 require("mason").setup()
 
--- Neogit
-local neogit = require('neogit')
-neogit.setup {}
 
 -- Some general settings
 
