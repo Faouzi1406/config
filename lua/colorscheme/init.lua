@@ -1,6 +1,6 @@
 -- Default options:
 require('kanagawa').setup({
-    compile = false,             -- enable compiling the colorscheme
+    compile = true,             -- enable compiling the colorscheme
     undercurl = true,            -- enable undercurls
     commentStyle = { italic = true },
     functionStyle = {},
@@ -14,7 +14,7 @@ require('kanagawa').setup({
         palette = {},
         theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
     },
-    overrides = function(colors) -- add/modify highlights
+    overrides = function(_) -- add/modify highlights
         return {}
     end,
     theme = "wave",              -- Load "wave" theme when 'background' option is not set

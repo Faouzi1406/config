@@ -19,9 +19,10 @@ return {
 		build = "make install_jsregexp"
 	},
 	{
-		'nvim-telescope/telescope.nvim',
-		tag = '0.1.1',
-		dependencies = { 'nvim-lua/plenary.nvim' }
+		"nvim-telescope/telescope.nvim",
+		tag = "0.1.1",
+		dependencies = { "nvim-lua/plenary.nvim" }
 	},
 	"williamboman/mason.nvim",
+	"TimUntersberger/neogit"
 }

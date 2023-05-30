@@ -6,6 +6,10 @@ require("colorscheme")
 require("ocaml").setup()
 require("mason").setup()
 
+-- Neogit
+local neogit = require('neogit')
+neogit.setup {}
+
 -- Some general settings
 
 -- Turn on relativenumber
