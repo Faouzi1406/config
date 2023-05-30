@@ -1,0 +1,15 @@
+{
+    "workspace.library": [
+        "/home/faouzi/.config/nvim",
+        "/home/faouzi/.local/share/nvim/lazy/lazy.nvim",
+        "/home/faouzi/.local/share/nvim/lazy/neodev.nvim",
+        "/home/faouzi/.local/share/nvim/lazy/which-key.nvim",
+        "/home/faouzi/.local/share/nvim/lazy/nvim-lspconfig",
+        "/usr/share/nvim/runtime",
+        "/usr/share/nvim/runtime/pack/dist/opt/matchit",
+        "/usr/lib/nvim",
+        "/home/faouzi/.local/state/nvim/lazy/readme",
+        "${3rd}/luv/library",
+        "${3rd}/luassert/library"
+    ]
+}

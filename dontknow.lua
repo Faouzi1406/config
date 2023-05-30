@@ -1,2 +1,0 @@
-NAME = "name";
-print(NAME);
