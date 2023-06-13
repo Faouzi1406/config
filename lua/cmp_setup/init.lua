@@ -2,6 +2,7 @@
 local cmp = require 'cmp'
 
 cmp.setup({
+	view = "wildmenu",
 	snippet = {
 		-- REQUIRED - you must specify a snippet engine
 		expand = function(args)
@@ -13,10 +14,7 @@ cmp.setup({
 		-- documentation = cmp.config.window.bordered(),
 	},
 	mapping = cmp.mapping.preset.insert({
-		['<C-b>'] = cmp.mapping.scroll_docs(-4),
-		['<C-f>'] = cmp.mapping.scroll_docs(4),
 		['<C-Space>'] = cmp.mapping.complete(),
-		['<C-e>'] = cmp.mapping.abort(),
 		['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 	}),
 	sources = cmp.config.sources({
@@ -53,3 +51,19 @@ cmp.setup.cmdline(':', {
 		{ name = 'cmdline' }
 	})
 })
+-- Set up lspconfig.
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+local servers = {
+	'rust_analyzer',
+	'ocamllsp',
+	'hls',
+	'tsserver'
+}
+
+-- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+for _, server_name in ipairs(servers) do
+	require('lspconfig')[server_name].setup {
+		capabilities = capabilities
+	}
+end

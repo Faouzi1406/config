@@ -27,9 +27,15 @@ require 'lspconfig'.lua_ls.setup {
 local lspconfig = require('lspconfig')
 lspconfig.pyright.setup {}
 lspconfig.tsserver.setup {}
+lspconfig.hls.setup {
+	filetypes = { 'haskell', 'lhaskell', 'cabal' },
+}
 lspconfig.ocamllsp.setup {
 	settings = {
 		['ocamllsp'] = {
+			get_language_id = function(_, ftype)
+				return ftype
+			end,
 		}
 	},
 	get_language_id = function(_, ftype)
@@ -42,7 +48,6 @@ lspconfig.rust_analyzer.setup {
 		['rust-analyzer'] = {},
 	},
 }
-
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions

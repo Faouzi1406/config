@@ -24,5 +24,22 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim" }
 	},
 	"williamboman/mason.nvim",
-	"TimUntersberger/neogit"
+	"TimUntersberger/neogit",
+	"simrat39/rust-tools.nvim",
+	"mfussenegger/nvim-dap",
+	"ThePrimeagen/harpoon",
+	"mrcjkb/haskell-tools.nvim",
+	"smolck/command-completion.nvim",
+	{
+		'numToStr/Comment.nvim',
+		config = function()
+			require('Comment').setup()
+		end
+	},
+	{
+		"nvim-lualine/lualine.nvim",
+		requires = { "nvim-tree/nvim-web-devicons", opt = true }
+	},
+	"mfussenegger/nvim-dap",
+	{ "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
 }
