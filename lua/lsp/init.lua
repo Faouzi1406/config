@@ -25,7 +25,9 @@ require 'lspconfig'.lua_ls.setup {
 -- Language server setup
 -- Setup language servers.
 local lspconfig = require('lspconfig')
+lspconfig.gopls.setup {}
 lspconfig.pyright.setup {}
+lspconfig.csharp_ls.setup {}
 lspconfig.tsserver.setup {}
 lspconfig.hls.setup {
 	filetypes = { 'haskell', 'lhaskell', 'cabal' },
