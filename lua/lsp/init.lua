@@ -22,35 +22,26 @@ require 'lspconfig'.lua_ls.setup {
 	},
 }
 
--- Language server setup
 -- Setup language servers.
 local lspconfig = require('lspconfig')
-lspconfig.gopls.setup {}
+
 lspconfig.pyright.setup {}
-lspconfig.csharp_ls.setup {}
 lspconfig.tsserver.setup {}
-lspconfig.hls.setup {
-	filetypes = { 'haskell', 'lhaskell', 'cabal' },
-}
-lspconfig.ocamllsp.setup {
-	settings = {
-		['ocamllsp'] = {
-			get_language_id = function(_, ftype)
-				return ftype
-			end,
-		}
-	},
-	get_language_id = function(_, ftype)
-		return ftype
-	end,
-}
 lspconfig.rust_analyzer.setup {
 	-- Server-specific settings. See `:help lspconfig-setup`
 	settings = {
 		['rust-analyzer'] = {},
 	},
 }
-lspconfig.clangd.setup {}
+
+local servers = { 'rust_analyzer' }
+
+for _, server in pairs(servers) do
+	lspconfig[server].setup({
+		capabilities = require('cmp_nvim_lsp').default_capabilities()
+	})
+end
+
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -89,3 +80,36 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		end, opts)
 	end,
 })
+
+---- LSP Diagnostics Options Setup
+local sign = function(opts)
+	vim.fn.sign_define(opts.name, {
+		texthl = opts.name,
+		text = opts.text,
+		numhl = ''
+	})
+end
+
+sign({ name = 'DiagnosticSignError', text = '❌' })
+sign({ name = 'DiagnosticSignWarn', text = '' })
+sign({ name = 'DiagnosticSignHint', text = '❕' })
+sign({ name = 'DiagnosticSignInfo', text = '' })
+
+vim.diagnostic.config({
+	virtual_text = false,
+	signs = true,
+	update_in_insert = true,
+	underline = true,
+	severity_sort = false,
+	float = {
+		border = 'rounded',
+		source = 'always',
+		header = '',
+		prefix = '',
+	},
+})
+
+vim.cmd([[
+set signcolumn=yes
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+]])

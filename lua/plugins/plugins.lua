@@ -29,7 +29,6 @@ return {
 	"mfussenegger/nvim-dap",
 	"ThePrimeagen/harpoon",
 	"mrcjkb/haskell-tools.nvim",
-	"smolck/command-completion.nvim",
 	{
 		'numToStr/Comment.nvim',
 		config = function()
@@ -40,6 +39,23 @@ return {
 		"nvim-lualine/lualine.nvim",
 		requires = { "nvim-tree/nvim-web-devicons", opt = true }
 	},
-	"mfussenegger/nvim-dap",
-	{ "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+	{
+	  "utilyre/barbecue.nvim",
+	  name = "barbecue",
+	  version = "*",
+	  dependencies = {
+	    "SmiteshP/nvim-navic",
+	    "nvim-tree/nvim-web-devicons", -- optional dependency
+	  },
+	  opts = {
+	    -- configurations go here
+	  },
+	},
+    	'hrsh7th/cmp-nvim-lua',
+     	'hrsh7th/cmp-nvim-lsp-signature-help',
+     	'hrsh7th/cmp-vsnip',
+     	'hrsh7th/cmp-path',
+     	'hrsh7th/cmp-buffer',
+     	'hrsh7th/vim-vsnip',
 }
